@@ -73,7 +73,15 @@ function draw()
 
             ctx.fillStyle=`hsl(${hue},100%,${lighting}%)`;
             ctx.moveTo(c.width/2, c.height/2);
-            ctx.arc(c.width/2,c.height/2,radius,start_angle,end_angle);
+
+            if(slices>1)
+            {
+                ctx.arc(c.width/2,c.height/2,radius,start_angle,end_angle);
+            }
+            else
+            {
+                ctx.arc(c.width/2,c.height/2,radius,0,2*Math.PI);
+            }
             ctx.closePath();
             ctx.fill();
         }
@@ -148,6 +156,25 @@ export function update_values()
     one_hue=getHueFromHex(document.getElementById("one_hue").value);
     draw();
 }
+function run_animation()
+{
+    slices=animation_dictionary[animation_index][0];
+    layers=animation_dictionary[animation_index][1];
+    
+    document.getElementById("slices").value=slices;
+    document.getElementById("slices_number").value=slices;
+    document.getElementById("layers").value=layers;
+    document.getElementById("layers_number").value=layers;
+
+    layer_size=c.width/(2*layers);
+
+    draw();
+    animation_index+=1;
+    if(animation_index<animation_dictionary.length)
+    {
+        setTimeout(run_animation,1000);
+    }
+}
 
 
 let c=document.getElementById("my_canvas");  
@@ -176,4 +203,34 @@ let using_one_hue=false;
 let one_hue=0;
 
 let light_to_dark=false;
+
+//Slices and layer count
+let animation_dictionary=[
+    [1,1],
+    [2,1],
+    [3,1],
+    [5,1],
+    [10,1],
+    [30,1],
+    [90,1],
+    [360,1],
+    [1,1],
+    [1,2],
+    [1,3],
+    [1,5],
+    [1,10],
+    [1,30],
+    [1,100],
+    [1,1],
+    [2,2],
+    [3,3],
+    [5,5],
+    [10,10],
+    [30,30],
+    [120,90],
+    [360,100]
+];
+let animation_index=0;
+setTimeout(run_animation,1000);
+
 draw();
