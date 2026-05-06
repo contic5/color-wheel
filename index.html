@@ -1,0 +1,69 @@
+<html>
+<head>
+<title>Color Wheel</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <script type="module" crossorigin src="/color-wheel/assets/index-D2npocxm.js"></script>
+  <link rel="stylesheet" crossorigin href="/color-wheel/assets/index-BXi8q63j.css">
+</head>
+<body>
+<main>
+<h1>Color Wheel</h1>
+<p>This website draws a color wheel made up of slices and layers. Slices are like each slice of a pizza while layers are each circle in the color wheel. The circles increase in radius for each layer.</p>
+
+<div class="block">
+<label for="slices">Slices</label>
+<input id="slices" type="range" min="1" max="360" value="10">
+<input id="slices_number" type="number" min="1" max="360" value="10">
+</div>
+
+<div class="block">
+<label for="layers">Layers</label>
+<input id="layers" type="range" min="1" max="360" value="10">
+<input id="layers_number" type="number" min="1" max="100" value="5">
+</div>
+
+<div class="block">
+<label for="min_lighting">Min_Lighting</label>
+<input id="min_lighting" type="range" min="1" max="100" value="20">
+
+<input id="min_lighting_number" type="number" min="1" max="100" value="20">
+</div>
+
+<div class="block">
+<label for="max_lighting">Max_Lighting</label>
+<input id="max_lighting" type="range" min="1" max="100" value="80">
+
+<input id="max_lighting_number" type="number" min="1" max="100" value="80">
+</div>
+
+<div class="block">
+<label for="angle_degrees">Angle</label>
+<input id="angle_degrees" type="range" min="0" max="360" value="0">
+
+<input id="angle_degrees_number" type="number" min="0" max="360" value="0">
+</div>
+
+
+<div>
+<label for="light_to_dark">Light to Dark
+</label>
+<input id="light_to_dark" type="checkbox">
+</div>
+
+<div>
+<label for="using_one_hue">Using One Hue
+</label>
+<input id="using_one_hue" type="checkbox">
+<input id="one_hue" type="color">
+</div>
+
+<div class="block">
+<button id="run_animation">Run Animation</button>
+</div>
+
+<canvas id="my_canvas" width="500" height="500"></canvas>
+
+</main>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+</body>
+</html>
