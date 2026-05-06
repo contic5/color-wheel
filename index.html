@@ -10,12 +10,14 @@
 
 <div class="block">
 <label for="slices">Slices</label>
-<input id="slices" type="number" min="1" max="360" value="10">
+<input id="slices" type="range" min="1" max="360" value="10">
+<input id="slices_number" type="number" min="1" max="360" value="10">
 </div>
 
 <div class="block">
 <label for="layers">Layers</label>
-<input id="layers" type="number" min="1" max="100" value="5">
+<input id="layers" type="range" min="1" max="360" value="10">
+<input id="layers_number" type="number" min="1" max="100" value="5">
 </div>
 
 <div class="block">
@@ -36,7 +38,21 @@
 <label for="angle_degrees">Angle</label>
 <input id="angle_degrees" type="range" min="0" max="360" value="0">
 
-<input id="angle_degrees_number" type="range" min="0" max="360" value="0">
+<input id="angle_degrees_number" type="number" min="0" max="360" value="0">
+</div>
+
+
+<div>
+<label for="light_to_dark">Light to Dark
+</label>
+<input id="light_to_dark" type="checkbox">
+</div>
+
+<div>
+<label for="using_one_hue">Using One Hue
+</label>
+<input id="using_one_hue" type="checkbox">
+<input id="one_hue" type="color">
 </div>
 
 <canvas id="my_canvas" width="500" height="500"></canvas>
@@ -49,10 +65,19 @@ import {update_values} from "/src/main.js";
 
 //Make sure that inputs are properly connected to updated function.
 document.getElementById("slices").onchange=update_values;
+document.getElementById("slices_number").onchange=update_values;
 document.getElementById("layers").onchange=update_values;
+document.getElementById("layers_number").onchange=update_values;
 document.getElementById("max_lighting").onchange=update_values;
+document.getElementById("max_lighting_number").onchange=update_values;
 document.getElementById("min_lighting").onchange=update_values;
+document.getElementById("min_lighting_number").onchange=update_values;
 document.getElementById("angle_degrees").onchange=update_values;
+document.getElementById("angle_degrees_number").onchange=update_values;
+
+document.getElementById("using_one_hue").onchange=update_values;
+document.getElementById("one_hue").onchange=update_values;
+document.getElementById("light_to_dark").onchange=update_values;
 
 </script>
 </body>

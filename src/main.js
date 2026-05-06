@@ -3,6 +3,35 @@ function clear()
     ctx.fillStyle="#000000";
     ctx.fillRect(0,0,c.width,c.height);
 }
+function getHueFromHex(hex) 
+{
+  // 1. Convert HEX to RGB
+  let r = parseInt(hex.slice(1, 3), 16) / 255;
+  let g = parseInt(hex.slice(3, 5), 16) / 255;
+  let b = parseInt(hex.slice(5, 7), 16) / 255;
+
+  // 2. Find min and max values to determine the range
+  let max = Math.max(r, g, b);
+  let min = Math.min(r, g, b);
+  let delta = max - min;
+  let h = 0;
+
+  // 3. Calculate Hue based on which channel is max
+  if (delta === 0) {
+    h = 0; // Achromatic (gray)
+  } else if (max === r) {
+    h = ((g - b) / delta) % 6;
+  } else if (max === g) {
+    h = (b - r) / delta + 2;
+  } else {
+    h = (r - g) / delta + 4;
+  }
+
+  h = Math.round(h * 60); // Convert to degrees
+  if (h < 0) h += 360;    // Ensure positive value
+
+  return h;
+}
 function draw()
 {
     ctx.lineWidth=0;
@@ -12,8 +41,10 @@ function draw()
     for(let layer=layers;layer>=1;layer--)
     {
         let lighting=(layer*(lighting_difference))/(layers+1)+min_lighting;
-
-        console.log(lighting);
+        if(light_to_dark)
+        {
+            lighting=max_lighting-(layer*(lighting_difference))/(layers+1);
+        }
 
         let radius=layer_size*(layer);
 
@@ -33,7 +64,13 @@ function draw()
             }
             ctx.beginPath();
             
-            const hue=(360*i)/slices;
+            let hue=(360*i)/slices;
+            if(using_one_hue)
+            {
+                hue=one_hue;
+                hue=hue+3*((i%5)-2);
+            }
+
             ctx.fillStyle=`hsl(${hue},100%,${lighting}%)`;
             ctx.moveTo(c.width/2, c.height/2);
             ctx.arc(c.width/2,c.height/2,radius,start_angle,end_angle);
@@ -45,11 +82,24 @@ function draw()
 export function update_values()
 {
     console.log("Updating values");
-    slices=parseInt(document.getElementById("slices").value);
-    layers=parseInt(document.getElementById("layers").value);
-    layer_size=c.width/(2*layers);
 
-    if(this.id=="min_lighting_number")
+    if(this.id=="slices_number")
+    {
+        document.getElementById("slices").value=document.getElementById("slices_number").value;
+    }
+    else if(this.id=="slices")
+    {
+        document.getElementById("slices_number").value=document.getElementById("slices").value;
+    }
+    else if(this.id=="layers_number")
+    {
+        document.getElementById("layers").value=document.getElementById("layers_number").value;
+    }
+    else if(this.id=="layers")
+    {
+        document.getElementById("layers_number").value=document.getElementById("layers").value;
+    }
+    else if(this.id=="min_lighting_number")
     {
         document.getElementById("min_lighting").value=document.getElementById("min_lighting_number").value;
     }
@@ -74,6 +124,10 @@ export function update_values()
         document.getElementById("angle_degrees_number").value=document.getElementById("angle_degrees").value;
     }
 
+    slices=parseInt(document.getElementById("slices").value);
+    layers=parseInt(document.getElementById("layers").value);
+    layer_size=c.width/(2*layers);
+
     min_lighting=parseInt(document.getElementById("min_lighting").value);
     max_lighting=parseInt(document.getElementById("max_lighting").value);
     lighting_difference=max_lighting-min_lighting;
@@ -87,6 +141,11 @@ export function update_values()
         max_lighting=min_lighting;
         document.getElementById("max_lighting").value=max_lighting;
     }
+
+    light_to_dark=document.getElementById("light_to_dark").checked;
+
+    using_one_hue=document.getElementById("using_one_hue").checked;
+    one_hue=getHueFromHex(document.getElementById("one_hue").value);
     draw();
 }
 
@@ -112,4 +171,9 @@ let lighting_difference=max_lighting-min_lighting;
 
 let end_radius=c.width/2;
 //setInterval(draw,100);
+
+let using_one_hue=false;
+let one_hue=0;
+
+let light_to_dark=false;
 draw();
