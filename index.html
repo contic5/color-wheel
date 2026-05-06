@@ -1,0 +1,59 @@
+<html>
+<head>
+<title>Color Wheel</title>
+<link href="src/style.css" type="text/css" rel="stylesheet">
+<link href="src/mystyle.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+<main>
+<h1>Color Wheel</h1>
+
+<div class="block">
+<label for="slices">Slices</label>
+<input id="slices" type="number" min="1" max="360" value="10">
+</div>
+
+<div class="block">
+<label for="layers">Layers</label>
+<input id="layers" type="number" min="1" max="100" value="5">
+</div>
+
+<div class="block">
+<label for="min_lighting">Min_Lighting</label>
+<input id="min_lighting" type="range" min="1" max="100" value="20">
+
+<input id="min_lighting_number" type="number" min="1" max="100" value="20">
+</div>
+
+<div class="block">
+<label for="max_lighting">Max_Lighting</label>
+<input id="max_lighting" type="range" min="1" max="100" value="80">
+
+<input id="max_lighting_number" type="number" min="1" max="100" value="80">
+</div>
+
+<div class="block">
+<label for="angle_degrees">Angle</label>
+<input id="angle_degrees" type="range" min="0" max="360" value="0">
+
+<input id="angle_degrees_number" type="range" min="0" max="360" value="0">
+</div>
+
+<canvas id="my_canvas" width="500" height="500"></canvas>
+
+</main>
+
+<script src="src/main.js" type="module"></script>
+<script type="module">
+import {update_values} from "/src/main.js";
+
+//Make sure that inputs are properly connected to updated function.
+document.getElementById("slices").onchange=update_values;
+document.getElementById("layers").onchange=update_values;
+document.getElementById("max_lighting").onchange=update_values;
+document.getElementById("min_lighting").onchange=update_values;
+document.getElementById("angle_degrees").onchange=update_values;
+
+</script>
+</body>
+</html>
