@@ -1,43 +1,15 @@
+import { getHueFromHex } from "./support_functions";
 function clear()
 {
     ctx.fillStyle="#000000";
     ctx.fillRect(0,0,c.width,c.height);
-}
-function getHueFromHex(hex) 
-{
-  // 1. Convert HEX to RGB
-  let r = parseInt(hex.slice(1, 3), 16) / 255;
-  let g = parseInt(hex.slice(3, 5), 16) / 255;
-  let b = parseInt(hex.slice(5, 7), 16) / 255;
-
-  // 2. Find min and max values to determine the range
-  let max = Math.max(r, g, b);
-  let min = Math.min(r, g, b);
-  let delta = max - min;
-  let h = 0;
-
-  // 3. Calculate Hue based on which channel is max
-  if (delta === 0) {
-    h = 0; // Achromatic (gray)
-  } else if (max === r) {
-    h = ((g - b) / delta) % 6;
-  } else if (max === g) {
-    h = (b - r) / delta + 2;
-  } else {
-    h = (r - g) / delta + 4;
-  }
-
-  h = Math.round(h * 60); // Convert to degrees
-  if (h < 0) h += 360;    // Ensure positive value
-
-  return h;
 }
 function draw()
 {
     ctx.lineWidth=0;
     clear();
 
-    //Draw the outermost slice first and then keep going inward until the innermost slice is drawn.
+    //Draw the outermost layer first and then keep going inward until the innermost layer is drawn.
     for(let layer=layers;layer>=1;layer--)
     {
         let lighting=(layer*(lighting_difference))/(layers+1)+min_lighting;
@@ -65,7 +37,7 @@ function draw()
             ctx.beginPath();
             
             let hue=(360*i)/slices;
-            if(using_one_hue)
+            if(using_one_hue==true)
             {
                 hue=one_hue;
                 hue=hue+3*((i%5)-2);
@@ -134,7 +106,7 @@ export function update_values()
 
     slices=parseInt(document.getElementById("slices").value);
     layers=parseInt(document.getElementById("layers").value);
-    layer_size=c.width/(2*layers);
+    layer_size=c.height/(2*layers);
 
     min_lighting=parseInt(document.getElementById("min_lighting").value);
     max_lighting=parseInt(document.getElementById("max_lighting").value);
@@ -156,17 +128,19 @@ export function update_values()
     one_hue=getHueFromHex(document.getElementById("one_hue").value);
     draw();
 }
-function run_animation()
+
+export function run_animation()
 {
     slices=animation_dictionary[animation_index][0];
     layers=animation_dictionary[animation_index][1];
-    
+    document.getElementById("run_animation").disabled=true;
+
     document.getElementById("slices").value=slices;
     document.getElementById("slices_number").value=slices;
     document.getElementById("layers").value=layers;
     document.getElementById("layers_number").value=layers;
 
-    layer_size=c.width/(2*layers);
+    layer_size=c.height/(2*layers);
 
     draw();
     animation_index+=1;
@@ -174,35 +148,12 @@ function run_animation()
     {
         setTimeout(run_animation,1000);
     }
+    else
+    {
+        animation_index=0;
+        document.getElementById("run_animation").disabled=false;
+    }
 }
-
-
-let c=document.getElementById("my_canvas");  
-let ctx=c.getContext("2d");
-
-//How many slices there are in the circle. If there are 10 slices, each slice is 36 degrees and takes up 1/10th of the circle.
-let slices=10;
-
-//How many layers there are in the circle. If the circle has a radius of 300 pixels and 3 layers, layer 3 has a radius of 300, layer 2 has a radius of 200 and layer 1 has a radius of 100. 
-let layers=5;
-
-let layer_size=c.width/(2*layers);
-
-let min_lighting=20;
-let max_lighting=80;
-
-let angle_radians=0;
-
-//Difference between maximum and minimum lighting
-let lighting_difference=max_lighting-min_lighting;
-
-let end_radius=c.width/2;
-//setInterval(draw,100);
-
-let using_one_hue=false;
-let one_hue=0;
-
-let light_to_dark=false;
 
 //Slices and layer count
 let animation_dictionary=[
@@ -230,7 +181,36 @@ let animation_dictionary=[
     [120,90],
     [360,100]
 ];
+
 let animation_index=0;
-setTimeout(run_animation,1000);
+
+let c=document.getElementById("my_canvas");  
+c.width=window.innerWidth;
+c.height=window.innerHeight;
+let ctx=c.getContext("2d");
+
+//How many slices there are in the circle. If there are 10 slices, each slice is 36 degrees and takes up 1/10th of the circle.
+let slices=10;
+
+//How many layers there are in the circle. If the circle has a radius of 300 pixels and 3 layers, layer 3 has a radius of 300, layer 2 has a radius of 200 and layer 1 has a radius of 100. 
+let layers=5;
+
+let layer_size=c.height/(2*layers);
+
+let min_lighting=20;
+let max_lighting=80;
+
+let angle_radians=0;
+
+//Difference between maximum and minimum lighting
+let lighting_difference=max_lighting-min_lighting;
+
+let end_radius=c.height/2;
+//setInterval(draw,100);
+
+let using_one_hue=false;
+let one_hue=0;
+
+let light_to_dark=false;
 
 draw();
